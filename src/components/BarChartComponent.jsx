@@ -1,7 +1,5 @@
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
-
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+import 'chart.js/auto';
 
 const BarChartComponent = ({ data, labels }) => {
   const chartData = {
@@ -19,19 +17,34 @@ const BarChartComponent = ({ data, labels }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       tooltip: {
-        enabled: true,
+        callbacks: {
+          title: (tooltipItems) => {
+            return `Title: ${tooltipItems[0].label}`;
+          },
+          label: (tooltipItem) => {
+            return `Year: ${tooltipItem.raw}`;
+          },
+        },
       },
     },
     scales: {
       y: {
-        beginAtZero: true,
+        beginAtZero: false,
+        ticks: {
+          precision: 0,
+        },
       },
     },
   };
 
-  return <Bar data={chartData} options={options} />;
+  return (
+    <div className="h-96">
+      <Bar data={chartData} options={options} />
+    </div>
+  );
 };
 
 export default BarChartComponent;
